@@ -18,10 +18,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading());
 
     try {
-      final user = await loginUseCase(
-        username: username,
-        password: password,
-      );
+      final user = await loginUseCase(username: username, password: password);
       emit(AuthSuccess(user));
     } on Failure catch (failure) {
       emit(AuthFailure(failure.message));

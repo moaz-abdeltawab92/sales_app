@@ -4,7 +4,7 @@ import '../models/sale_order_line_model.dart';
 import '../models/sale_order_model.dart';
 import 'sales_order_remote_data_source.dart';
 
-/// Real Odoo JSON-RPC implementation of [SalesOrderRemoteDataSource] using `sale.order` & `sale.order.line`.
+/// Odoo implementation of [SalesOrderRemoteDataSource] using `sale.order` & `sale.order.line`.
 class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
   final OdooRpcClient client;
 
@@ -13,7 +13,7 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
   @override
   Future<List<SaleOrderModel>> getSalesOrders() async {
     try {
-      // Step 1: Fetch all sales orders
+      // Fetch all sales orders
       final orderResponse = await client.executeKw(
         model: 'sale.order',
         method: 'search_read',
@@ -41,7 +41,6 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
           .map((item) => Map<String, dynamic>.from(item as Map))
           .toList();
 
-      // Collect all order_line IDs across all orders
       final List<int> allLineIds = [];
       for (final oMap in orderMaps) {
         final rawLines = oMap['order_line'];
@@ -52,7 +51,7 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
         }
       }
 
-      // Step 2: Fetch line item details if any lines exist
+      // Fetch line item details if any lines exist
       final Map<int, List<SaleOrderLineModel>> linesByOrderId = {};
 
       if (allLineIds.isNotEmpty) {
@@ -61,8 +60,8 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
           method: 'search_read',
           args: [
             [
-              ['id', 'in', allLineIds]
-            ]
+              ['id', 'in', allLineIds],
+            ],
           ],
           kwargs: {
             'fields': [
@@ -89,7 +88,7 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
         }
       }
 
-      // Step 3: Construct SaleOrderModel list
+      // Construct SaleOrderModel list
       final List<SaleOrderModel> orders = orderMaps.map((oMap) {
         final orderId = OdooRpcClient.parseInt(oMap['id']);
         final orderLines = linesByOrderId[orderId] ?? <SaleOrderLineModel>[];
@@ -100,35 +99,36 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
     } on Failure {
       rethrow;
     } catch (e) {
-      throw ServerFailure('Failed to fetch sales orders from Odoo: ${e.toString()}');
+      throw ServerFailure(
+        'Failed to fetch sales orders from Odoo: ${e.toString()}',
+      );
     }
   }
 
   @override
   Future<SaleOrderModel> confirmSalesOrder(int orderId) async {
     try {
-      // Step 1: Execute action_confirm on sale.order
+      // Execute action_confirm on sale.order
       final result = await client.executeKw(
         model: 'sale.order',
         method: 'action_confirm',
         args: [
-          [orderId]
+          [orderId],
         ],
       );
 
-      // action_confirm typically returns true or a dictionary action
       if (result != true && result is! Map) {
         throw const ServerFailure('Failed to confirm sales order on Odoo');
       }
 
-      // Step 2: Re-read the confirmed sales order from Odoo
+      // Re-read the confirmed sales order from Odoo
       final updatedOrders = await client.executeKw(
         model: 'sale.order',
         method: 'search_read',
         args: [
           [
-            ['id', '=', orderId]
-          ]
+            ['id', '=', orderId],
+          ],
         ],
         kwargs: {
           'fields': [
@@ -159,8 +159,8 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
               method: 'search_read',
               args: [
                 [
-                  ['id', 'in', lineIds]
-                ]
+                  ['id', 'in', lineIds],
+                ],
               ],
               kwargs: {
                 'fields': [
@@ -217,14 +217,21 @@ class OdooSalesOrderRemoteDataSource implements SalesOrderRemoteDataSource {
     final orderNumber = OdooRpcClient.parseString(json['name'], 'SO#$id');
     final customerName = _extractMany2OneName(json['partner_id'], 'Customer');
 
-    final rawState = OdooRpcClient.parseString(json['state'], 'draft').toLowerCase();
+    final rawState = OdooRpcClient.parseString(
+      json['state'],
+      'draft',
+    ).toLowerCase();
     // Map Odoo states: draft/sent -> draft; sale/done -> sale
-    final status = (rawState == 'sale' || rawState == 'done') ? 'sale' : 'draft';
+    final status = (rawState == 'sale' || rawState == 'done')
+        ? 'sale'
+        : 'draft';
 
     final rawDate = json['date_order'];
     DateTime dateOrder = DateTime.now();
     if (rawDate is String && rawDate.isNotEmpty) {
-      final formattedStr = rawDate.contains(' ') ? rawDate.replaceAll(' ', 'T') : rawDate;
+      final formattedStr = rawDate.contains(' ')
+          ? rawDate.replaceAll(' ', 'T')
+          : rawDate;
       dateOrder = DateTime.tryParse(formattedStr) ?? DateTime.now();
     }
 

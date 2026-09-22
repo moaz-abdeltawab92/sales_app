@@ -3,7 +3,7 @@ import '../../../../core/network/odoo_rpc_client.dart';
 import '../models/customer_model.dart';
 import 'customer_remote_data_source.dart';
 
-/// Real Odoo JSON-RPC implementation of [CustomerRemoteDataSource] using `res.partner`.
+/// Odoo implementation of [CustomerRemoteDataSource] using `res.partner`.
 class OdooCustomerRemoteDataSource implements CustomerRemoteDataSource {
   final OdooRpcClient client;
 
@@ -13,7 +13,7 @@ class OdooCustomerRemoteDataSource implements CustomerRemoteDataSource {
   Future<List<CustomerModel>> getCustomers({String? searchQuery}) async {
     try {
       final domain = <dynamic>[
-        ['customer_rank', '>', 0]
+        ['customer_rank', '>', 0],
       ];
 
       if (searchQuery != null && searchQuery.trim().isNotEmpty) {
@@ -47,9 +47,9 @@ class OdooCustomerRemoteDataSource implements CustomerRemoteDataSource {
         return _mapToCustomerModel(map);
       }).toList();
 
-      // Additional safeguard: filter out non-customers if server domain returned any
-      final filteredCustomers =
-          customers.where((c) => c.customerRank > 0).toList();
+      final filteredCustomers = customers
+          .where((c) => c.customerRank > 0)
+          .toList();
 
       if (searchQuery != null && searchQuery.trim().isNotEmpty) {
         final query = searchQuery.trim().toLowerCase();
@@ -62,7 +62,9 @@ class OdooCustomerRemoteDataSource implements CustomerRemoteDataSource {
     } on Failure {
       rethrow;
     } catch (e) {
-      throw ServerFailure('Failed to fetch customers from Odoo: ${e.toString()}');
+      throw ServerFailure(
+        'Failed to fetch customers from Odoo: ${e.toString()}',
+      );
     }
   }
 
@@ -97,8 +99,8 @@ class OdooCustomerRemoteDataSource implements CustomerRemoteDataSource {
         method: 'search_read',
         args: [
           [
-            ['id', '=', customerId]
-          ]
+            ['id', '=', customerId],
+          ],
         ],
         kwargs: {
           'fields': [

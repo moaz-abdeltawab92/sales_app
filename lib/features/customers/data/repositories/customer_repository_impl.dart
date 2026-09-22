@@ -24,8 +24,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
 
   void _initConnectivityListener() {
     if (connectivity != null) {
-      _connectivitySubscription =
-          connectivity!.onConnectivityChanged.listen((results) {
+      _connectivitySubscription = connectivity!.onConnectivityChanged.listen((
+        results,
+      ) {
         final isOnline = results.any((r) => r != ConnectivityResult.none);
         if (isOnline) {
           syncPendingUpdates();
@@ -51,8 +52,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
     if (isOnline) {
       try {
         // Try remote fetch
-        final remoteModels =
-            await remoteDataSource.getCustomers(searchQuery: searchQuery);
+        final remoteModels = await remoteDataSource.getCustomers(
+          searchQuery: searchQuery,
+        );
 
         // Cache remotely fetched customers if local data source is available
         if (localDataSource != null) {
@@ -95,7 +97,8 @@ class CustomerRepositoryImpl implements CustomerRepository {
         return await _getCachedCustomers(searchQuery: searchQuery);
       }
       throw const NetworkFailure(
-          'Device is offline and no cached data is available');
+        'Device is offline and no cached data is available',
+      );
     }
   }
 
@@ -169,7 +172,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }
 
   Future<Customer> _saveOfflinePhoneUpdate(
-      int customerId, String newPhone) async {
+    int customerId,
+    String newPhone,
+  ) async {
     await localDataSource!.savePendingPhoneUpdate(customerId, newPhone);
     final cached = await localDataSource!.getCachedCustomers();
     final index = cached.indexWhere((c) => c.id == customerId);

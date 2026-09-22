@@ -55,9 +55,13 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
       );
       emit(CustomerDetailSuccess(updatedCustomer));
     } on Failure catch (f) {
-      emit(CustomerDetailFailure(customer: currentCustomer, message: f.message));
+      emit(
+        CustomerDetailFailure(customer: currentCustomer, message: f.message),
+      );
     } catch (e) {
-      emit(CustomerDetailFailure(customer: currentCustomer, message: e.toString()));
+      emit(
+        CustomerDetailFailure(customer: currentCustomer, message: e.toString()),
+      );
     }
   }
 }

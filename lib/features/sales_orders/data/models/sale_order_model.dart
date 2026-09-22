@@ -14,21 +14,31 @@ class SaleOrderModel extends SaleOrder {
   });
 
   factory SaleOrderModel.fromJson(Map<String, dynamic> json) {
-    final rawLines = json['order_line'] as List<dynamic>? ?? json['lines'] as List<dynamic>? ?? [];
+    final rawLines =
+        json['order_line'] as List<dynamic>? ??
+        json['lines'] as List<dynamic>? ??
+        [];
     final linesList = rawLines
         .map((l) => SaleOrderLineModel.fromJson(l as Map<String, dynamic>))
         .toList();
 
     return SaleOrderModel(
       id: json['id'] as int? ?? 0,
-      orderNumber: json['name'] as String? ?? json['order_number'] as String? ?? '',
-      customerName: json['partner_name'] as String? ?? json['customer_name'] as String? ?? 'Customer',
+      orderNumber:
+          json['name'] as String? ?? json['order_number'] as String? ?? '',
+      customerName:
+          json['partner_name'] as String? ??
+          json['customer_name'] as String? ??
+          'Customer',
       orderDate: json['date_order'] != null
           ? DateTime.parse(json['date_order'] as String)
           : DateTime.now(),
       status: json['state'] as String? ?? json['status'] as String? ?? 'draft',
       lines: linesList,
-      totalAmount: (json['amount_total'] as num?)?.toDouble() ?? (json['total_amount'] as num?)?.toDouble() ?? 0.0,
+      totalAmount:
+          (json['amount_total'] as num?)?.toDouble() ??
+          (json['total_amount'] as num?)?.toDouble() ??
+          0.0,
     );
   }
 

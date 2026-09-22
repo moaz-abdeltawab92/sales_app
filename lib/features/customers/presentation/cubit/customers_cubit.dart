@@ -8,9 +8,12 @@ class CustomersCubit extends Cubit<CustomersState> {
   String _currentQuery = '';
 
   CustomersCubit({required this.getCustomersUseCase})
-      : super(const CustomersInitial());
+    : super(const CustomersInitial());
 
-  Future<void> fetchCustomers({String? searchQuery, bool showLoading = true}) async {
+  Future<void> fetchCustomers({
+    String? searchQuery,
+    bool showLoading = true,
+  }) async {
     _currentQuery = searchQuery ?? _currentQuery;
 
     if (showLoading) {

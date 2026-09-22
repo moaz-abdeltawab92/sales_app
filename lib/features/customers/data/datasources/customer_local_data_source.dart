@@ -44,10 +44,15 @@ class CustomerLocalDataSourceImpl implements CustomerLocalDataSource {
     final pending = await getPendingPhoneUpdates();
     // Remove duplicate for the same customer ID if present
     pending.removeWhere((p) => p.customerId == customerId);
-    pending.add(PendingCustomerPhoneUpdateModel(customerId: customerId, phone: phone));
+    pending.add(
+      PendingCustomerPhoneUpdateModel(customerId: customerId, phone: phone),
+    );
 
     final jsonList = pending.map((p) => p.toJson()).toList();
-    await sharedPreferences.setString(pendingPhoneUpdatesKey, jsonEncode(jsonList));
+    await sharedPreferences.setString(
+      pendingPhoneUpdatesKey,
+      jsonEncode(jsonList),
+    );
   }
 
   @override
@@ -58,7 +63,11 @@ class CustomerLocalDataSourceImpl implements CustomerLocalDataSource {
     }
     final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
     return jsonList
-        .map((j) => PendingCustomerPhoneUpdateModel.fromJson(j as Map<String, dynamic>))
+        .map(
+          (j) => PendingCustomerPhoneUpdateModel.fromJson(
+            j as Map<String, dynamic>,
+          ),
+        )
         .toList();
   }
 
@@ -67,6 +76,9 @@ class CustomerLocalDataSourceImpl implements CustomerLocalDataSource {
     final pending = await getPendingPhoneUpdates();
     pending.removeWhere((p) => p.customerId == customerId);
     final jsonList = pending.map((p) => p.toJson()).toList();
-    await sharedPreferences.setString(pendingPhoneUpdatesKey, jsonEncode(jsonList));
+    await sharedPreferences.setString(
+      pendingPhoneUpdatesKey,
+      jsonEncode(jsonList),
+    );
   }
 }

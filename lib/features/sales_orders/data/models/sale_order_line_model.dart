@@ -12,9 +12,18 @@ class SaleOrderLineModel extends SaleOrderLine {
   factory SaleOrderLineModel.fromJson(Map<String, dynamic> json) {
     return SaleOrderLineModel(
       id: json['id'] as int? ?? 0,
-      productName: json['name'] as String? ?? json['product_name'] as String? ?? 'Product',
-      quantity: (json['product_uom_qty'] as num?)?.toDouble() ?? (json['quantity'] as num?)?.toDouble() ?? 1.0,
-      unitPrice: (json['price_unit'] as num?)?.toDouble() ?? (json['unit_price'] as num?)?.toDouble() ?? 0.0,
+      productName:
+          json['name'] as String? ??
+          json['product_name'] as String? ??
+          'Product',
+      quantity:
+          (json['product_uom_qty'] as num?)?.toDouble() ??
+          (json['quantity'] as num?)?.toDouble() ??
+          1.0,
+      unitPrice:
+          (json['price_unit'] as num?)?.toDouble() ??
+          (json['unit_price'] as num?)?.toDouble() ??
+          0.0,
     );
   }
 

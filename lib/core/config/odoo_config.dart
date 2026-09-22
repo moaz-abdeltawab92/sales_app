@@ -20,9 +20,7 @@ class OdooConfig {
       'ODOO_DB',
       defaultValue: 'sales-assessment',
     );
-    const username = String.fromEnvironment(
-      'ODOO_USERNAME',
-    );
+    const username = String.fromEnvironment('ODOO_USERNAME');
 
     return OdooConfig(
       baseUrl: baseUrl,

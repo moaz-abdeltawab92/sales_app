@@ -7,7 +7,7 @@ class SalesOrdersCubit extends Cubit<SalesOrdersState> {
   final GetSalesOrdersUseCase getSalesOrdersUseCase;
 
   SalesOrdersCubit({required this.getSalesOrdersUseCase})
-      : super(const SalesOrdersInitial());
+    : super(const SalesOrdersInitial());
 
   Future<void> fetchSalesOrders({bool showLoading = true}) async {
     if (showLoading) {

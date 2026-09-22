@@ -45,7 +45,11 @@ class _SalesOrdersListPageState extends State<SalesOrdersListPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, size: 56, color: AppColors.error),
+                    const Icon(
+                      Icons.error_outline,
+                      size: 56,
+                      color: AppColors.error,
+                    ),
                     const SizedBox(height: 16),
                     const Text(
                       'Unable to load sales orders',
@@ -79,8 +83,11 @@ class _SalesOrdersListPageState extends State<SalesOrdersListPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.receipt_long_outlined,
-                        size: 56, color: AppColors.textMuted),
+                    const Icon(
+                      Icons.receipt_long_outlined,
+                      size: 56,
+                      color: AppColors.textMuted,
+                    ),
                     const SizedBox(height: 16),
                     const Text(
                       'No Sales Orders available',

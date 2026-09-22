@@ -77,7 +77,11 @@ class CardSkeletonLoader extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                const SkeletonContainer(width: 44, height: 44, borderRadius: 22),
+                const SkeletonContainer(
+                  width: 44,
+                  height: 44,
+                  borderRadius: 22,
+                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(

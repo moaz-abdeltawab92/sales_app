@@ -3,7 +3,7 @@ import '../../../../core/network/odoo_rpc_client.dart';
 import '../models/authenticated_user_model.dart';
 import 'auth_remote_data_source.dart';
 
-/// Real Odoo JSON-RPC implementation of [AuthRemoteDataSource].
+/// Odoo JSON-RPC implementation of [AuthRemoteDataSource].
 class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
   final OdooRpcClient client;
 
@@ -25,15 +25,15 @@ class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
       throw const AuthenticationFailure('Password is required');
     }
 
-    // Step 1: Authenticate via JSON-RPC
+    // Authenticate via JSON-RPC
     final uid = await client.authenticate(
       username: cleanUsername,
       password: cleanPassword,
     );
 
-    // Step 2: Fetch user info from `res.users` to determine user name and role
+    // Fetch user info from `res.users` to determine display name and role
     String displayName = cleanUsername;
-    bool isInternal = true; // Default fallback for Odoo users
+    bool isInternal = true;
 
     try {
       final userRecords = await client.executeKw(
@@ -41,8 +41,8 @@ class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
         method: 'search_read',
         args: [
           [
-            ['id', '=', uid]
-          ]
+            ['id', '=', uid],
+          ],
         ],
         kwargs: {
           'fields': ['name', 'login', 'email', 'share'],
@@ -51,8 +51,9 @@ class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
       );
 
       if (userRecords is List && userRecords.isNotEmpty) {
-        final Map<String, dynamic> userRecord =
-            Map<String, dynamic>.from(userRecords.first as Map);
+        final Map<String, dynamic> userRecord = Map<String, dynamic>.from(
+          userRecords.first as Map,
+        );
 
         final name = OdooRpcClient.parseString(userRecord['name']);
         if (name.isNotEmpty) {

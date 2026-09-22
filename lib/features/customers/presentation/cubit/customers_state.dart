@@ -20,10 +20,7 @@ class CustomersLoaded extends CustomersState {
   final List<Customer> customers;
   final String searchQuery;
 
-  const CustomersLoaded({
-    required this.customers,
-    this.searchQuery = '',
-  });
+  const CustomersLoaded({required this.customers, this.searchQuery = ''});
 
   @override
   List<Object?> get props => [customers, searchQuery];

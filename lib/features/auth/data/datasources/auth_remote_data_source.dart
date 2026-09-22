@@ -21,7 +21,9 @@ class MockAuthRemoteDataSource implements AuthRemoteDataSource {
     await Future.delayed(const Duration(milliseconds: 600));
 
     if (username.trim().isEmpty || password.trim().isEmpty) {
-      throw const AuthenticationFailure('Username and password cannot be empty');
+      throw const AuthenticationFailure(
+        'Username and password cannot be empty',
+      );
     }
 
     return AuthenticatedUserModel(

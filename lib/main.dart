@@ -11,11 +11,7 @@ void main() async {
   final connectivity = Connectivity();
   final odooConfig = OdooConfig.fromEnvironment();
 
-  AppRouter.init(
-    prefs: prefs,
-    connectivity: connectivity,
-    config: odooConfig,
-  );
+  AppRouter.init(prefs: prefs, connectivity: connectivity, config: odooConfig);
 
   runApp(const SalesApp());
 }

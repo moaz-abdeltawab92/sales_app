@@ -7,10 +7,7 @@ import '../cubit/customer_detail_cubit.dart';
 class CustomerDetailPage extends StatefulWidget {
   final Customer customer;
 
-  const CustomerDetailPage({
-    super.key,
-    required this.customer,
-  });
+  const CustomerDetailPage({super.key, required this.customer});
 
   @override
   State<CustomerDetailPage> createState() => _CustomerDetailPageState();
@@ -44,7 +41,9 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
   void _onSavePressed(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       FocusScope.of(context).unfocus();
-      context.read<CustomerDetailCubit>().updatePhone(_phoneController.text.trim());
+      context.read<CustomerDetailCubit>().updatePhone(
+        _phoneController.text.trim(),
+      );
     }
   }
 
@@ -76,9 +75,7 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
         final currentCustomer = state.customer;
 
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Customer Details'),
-          ),
+          appBar: AppBar(title: const Text('Customer Details')),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
             child: Form(
@@ -94,8 +91,9 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            backgroundColor:
-                                AppColors.primaryLight.withValues(alpha: 0.15),
+                            backgroundColor: AppColors.primaryLight.withValues(
+                              alpha: 0.15,
+                            ),
                             child: Text(
                               currentCustomer.name.isNotEmpty
                                   ? currentCustomer.name[0].toUpperCase()

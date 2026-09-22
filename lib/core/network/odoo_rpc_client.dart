@@ -14,10 +14,8 @@ class OdooRpcClient {
   String? _username;
   String? _password;
 
-  OdooRpcClient({
-    required this.config,
-    HttpClient? httpClient,
-  }) : _httpClient = httpClient ?? HttpClient();
+  OdooRpcClient({required this.config, HttpClient? httpClient})
+    : _httpClient = httpClient ?? HttpClient();
 
   /// Gets current authenticated UID or default 0.
   int? get uid => _uid;
@@ -47,12 +45,7 @@ class OdooRpcClient {
       'params': {
         'service': 'common',
         'method': 'authenticate',
-        'args': [
-          config.database,
-          username,
-          password,
-          {},
-        ],
+        'args': [config.database, username, password, {}],
       },
       'id': _nextId(),
     };
@@ -69,7 +62,7 @@ class OdooRpcClient {
     }
 
     if (result == false || result == null) {
-      throw const AuthenticationFailure('Invalid username or password/API key');
+      throw const AuthenticationFailure('Invalid username or password');
     }
 
     throw const AuthenticationFailure('Authentication failed. Please check credentials.');
@@ -157,7 +150,7 @@ class OdooRpcClient {
           }
         }
 
-        // Sanitize error message to avoid printing passwords/API keys
+        // Sanitize sensitive credentials from error message
         errorMessage = _sanitizeMessage(errorMessage);
 
         throw ServerFailure(errorMessage);
@@ -165,7 +158,9 @@ class OdooRpcClient {
 
       return jsonResponse;
     } on SocketException {
-      throw const NetworkFailure('Unable to connect to Odoo server. Check network connection.');
+      throw const NetworkFailure(
+        'Unable to connect to Odoo server. Check network connection.',
+      );
     } on FormatException {
       throw const ServerFailure('Invalid JSON response received from server.');
     } on Failure {

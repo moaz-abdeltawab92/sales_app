@@ -21,8 +21,10 @@ class SaleOrder extends Equatable {
     required this.totalAmount,
   });
 
-  bool get isDraft => status.toLowerCase() == 'draft' || status.toLowerCase() == 'quotation';
-  bool get isConfirmed => status.toLowerCase() == 'sale' || status.toLowerCase() == 'confirmed';
+  bool get isDraft =>
+      status.toLowerCase() == 'draft' || status.toLowerCase() == 'quotation';
+  bool get isConfirmed =>
+      status.toLowerCase() == 'sale' || status.toLowerCase() == 'confirmed';
 
   SaleOrder copyWith({
     int? id,
@@ -46,12 +48,12 @@ class SaleOrder extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        orderNumber,
-        customerName,
-        orderDate,
-        status,
-        lines,
-        totalAmount,
-      ];
+    id,
+    orderNumber,
+    customerName,
+    orderDate,
+    status,
+    lines,
+    totalAmount,
+  ];
 }

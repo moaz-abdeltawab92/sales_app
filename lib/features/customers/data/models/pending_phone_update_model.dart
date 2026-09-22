@@ -18,10 +18,7 @@ class PendingCustomerPhoneUpdateModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'customer_id': customerId,
-      'phone': phone,
-    };
+    return {'customer_id': customerId, 'phone': phone};
   }
 
   @override

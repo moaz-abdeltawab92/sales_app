@@ -66,13 +66,13 @@ class MockCustomerDataSource implements CustomerRemoteDataSource {
     await Future.delayed(const Duration(milliseconds: 300));
 
     // Strictly enforce requirement: customer_rank > 0
-    Iterable<CustomerModel> filtered = _mockCustomers.where((c) => c.customerRank > 0);
+    Iterable<CustomerModel> filtered = _mockCustomers.where(
+      (c) => c.customerRank > 0,
+    );
 
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
       final query = searchQuery.trim().toLowerCase();
-      filtered = filtered.where(
-        (c) => c.name.toLowerCase().contains(query),
-      );
+      filtered = filtered.where((c) => c.name.toLowerCase().contains(query));
     }
 
     return filtered.toList();
